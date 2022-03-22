@@ -6,11 +6,36 @@
 //
 
 import SwiftUI
+import Combine
+import GoogleMapsPlatformCombine
+import GooglePlaces
 
 struct ContentView: View {
+    @State var place: String = ""
+    @StateObject private var presenter = Presenter()
+    
+    // https://sarunw.com/posts/searchable-in-swiftui/
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        NavigationView {
+            VStack {
+                List(presenter.predictions) { place in
+                    Text(place.title)
+                }
+            }.searchable(
+                text: $place
+                , prompt:"検索したい場所を入力します"
+                , suggestions: {
+                    ForEach(presenter.predictions) { prediction in
+                        Text(prediction.title)
+                            .searchCompletion(prediction.title)
+                    }
+                }
+            )
+                .onChange(of: place, perform: { newValue in
+                    presenter.search(text: newValue)
+                })
+                .navigationTitle("Places")
+        }
     }
 }
 

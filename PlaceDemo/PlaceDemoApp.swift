@@ -6,12 +6,21 @@
 //
 
 import SwiftUI
+//import GoogleMaps
+import GooglePlaces
 
 @main
 struct PlaceDemoApp: App {
+    let apiKey = ""
+    
+    init() {
+//        GMSServices.provideAPIKey(apiKey)
+        GMSPlacesClient.provideAPIKey(apiKey)
+    }
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView2()
         }
     }
 }
